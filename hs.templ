@@ -1,0 +1,15 @@
+main :: IO()
+main = do
+    contents <- readFile "$$FILE$$"
+    putStrLn (solve contents)
+
+
+splitStrAt :: String -> Char -> String -> [String]
+splitStrAt "" _ buf = [buf | buf /= ""]
+splitStrAt (c:s) del buf
+    | c == del = buf : splitStrAt s del ""
+    | otherwise = splitStrAt s del (buf ++ [c])
+
+
+solve :: String -> String
+solve inp = 
