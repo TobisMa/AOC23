@@ -20,9 +20,9 @@ START_TIME = datetime(YEAR, 12, DAY, 6, 0, 1, 0, datetime.utcnow().tzinfo)
 TIME_OFFSET = timedelta(0, 20, 0, 0, 0, 0, 0)
 
 print(RESET + f"Today: {DAY}.{MONTH}.{YEAR}") 
-if START_TIME - date <= TIME_OFFSET:
+if START_TIME - date <= TIME_OFFSET and (START_TIME - date).seconds > 0:
     print(CYAN + "INFO: Waiting for start...")
-    while START_TIME - date <= TIME_OFFSET:
+    while START_TIME - date <= TIME_OFFSET and (START_TIME - date).seconds > 0:
         print("\r" + CYAN + "INFO: Only " + str((START_TIME - date).seconds) + "s left" + RESET, end="")
         date = datetime.utcnow()
         sleep(.9)
