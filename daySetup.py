@@ -1,9 +1,9 @@
-from datetime import datetime
 import os
 import sys
-import colorama
+from datetime import datetime, timedelta
+from time import sleep
 from requests import Session
-colorama.Fore.CYAN
+
 CYAN = "\x1b[36m"
 RED = "\x1b[31m"
 YELLOW = "\x1b[33m"
@@ -16,9 +16,24 @@ YEAR = date.year
 MONTH = date.month
 DAY = date.day
 
-print(f"Today: {DAY}.{MONTH}.{YEAR}")
+START_TIME = datetime(YEAR, 12, DAY, 6, 0, 1, 0, datetime.utcnow().tzinfo)
+TIME_OFFSET = timedelta(0, 20, 0, 0, 0, 0, 0)
+
+print(RESET + f"Today: {DAY}.{MONTH}.{YEAR}") 
+if START_TIME - date <= TIME_OFFSET:
+    print(CYAN + "INFO: Waiting for start...")
+    while START_TIME - date <= TIME_OFFSET:
+        print("\r" + CYAN + "INFO: Only " + str((START_TIME - date).seconds) + "s left" + RESET, end="")
+        date = datetime.utcnow()
+        sleep(.9)
+    print()
+
+    
 if MONTH != 12:
     print(RED + "ERROR: Not december yet" + RESET)
+    raise SystemExit(1)
+elif START_TIME - date >= TIME_OFFSET:
+    print(RED + "ERROR: Assignment opens at 6am" + RESET)
     raise SystemExit(1)
 
 DAY_REPR = str(DAY).zfill(2)
