@@ -8,6 +8,12 @@
 
 char* readFile(char* filename) {
     FILE* fileObj;
+    fileObj = fopen(filename, "r");
+
+    if (fileObj == NULL) {
+        printf("Failed to open file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
     char ch;
 
     int segments = 1;
@@ -41,14 +47,14 @@ char* readFile(char* filename) {
 
 
 void solve(const char* data) {
-    printf(data);
+    
 }
 
 
 int main(int argc, char const *argv[])
 {
     char* data = readFile("$$FILE$$");
-    solve(&data);
+    solve(data);
     free(data);    
     return 0;
 }
