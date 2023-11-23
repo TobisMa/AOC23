@@ -2,3 +2,4 @@
 .session_id
 *.class
 *.exe
+*.o

@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+#define BUF_SIZE 1024
+
+
+char* readFile(char* filename) {
+    FILE* fileObj;
+    char ch;
+
+    int segments = 1;
+    size_t bufIndex = 0;
+    char* fileContents = malloc(BUF_SIZE * sizeof(char));
+
+    if (fileContents == NULL) {
+        printf("Failing allocating memory for fileContents\n");
+        exit(EXIT_FAILURE);
+    }
+
+    do {
+        ch = fgetc(fileObj);
+        fileContents[bufIndex++] = ch != EOF ? ch : '\0';
+        if (bufIndex % BUF_SIZE >= segments) {
+            char* newBuf = realloc(fileContents, ++segments * BUF_SIZE);
+            if (newBuf == NULL) {
+                printf("Reallocating memory failed\n");
+                free(fileContents);
+                exit(EXIT_FAILURE);
+            } 
+            else if (fileContents != newBuf) {
+                fileContents = newBuf;
+            }
+            newBuf = NULL;
+        } 
+    } while (!feof(fileObj));
+    return fileContents;
+}
+
+
+
+void solve(const char* data) {
+    printf(data);
+}
+
+
+int main(int argc, char const *argv[])
+{
+    char* data = readFile("$$FILE$$");
+    solve(&data);
+    free(data);    
+    return 0;
+}
