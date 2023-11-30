@@ -1,16 +1,31 @@
 main :: IO()
 main = do
     contents <- readFile "$$FILE$$"
-    print (solve contents)
+    putStrLn (solve contents)
+
+solve :: String -> String
+solve inp = 
+
+
+
 
 getFileLines :: String -> [String] 
 getFileLines = lines
 
-concatLines :: [String] -> String
-concatLines = unlines
+concatValuesByLine :: Show a => [a] -> String
+concatValuesByLine v = unlines (map show v)
 
-concatValues :: [String] -> String
-concatValues = concat
+concatStrsByLine :: [String] -> String
+concatStrsByLine = unlines
+
+concatValues :: Show a => [a] -> String
+concatValues = concatMap show
+
+concatStrs :: [String] -> String -> String 
+concatStrs (first:strs) sep = foldl (\acc x -> acc ++ sep ++ x) first strs
+
+valuesToStr :: Show a => [a] -> [String]
+valuesToStr = map show
 
 splitStrAt :: String -> Char -> String -> [String]
 splitStrAt "" _ buf = [buf | buf /= ""]
@@ -22,10 +37,7 @@ strToint :: String -> Integer
 strToint s = read s :: Integer
 
 strToFloat :: String -> Float
-strToint s = read s :: Float
+strToFloat s = read s :: Float
 
-strToFloat :: String -> Float
-strToint s = read s :: Double
-
-solve :: String -> String
-solve inp = 
+strToDouble :: String -> Double
+strToDouble s = read s :: Double
