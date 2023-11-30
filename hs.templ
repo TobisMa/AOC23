@@ -1,8 +1,16 @@
 main :: IO()
 main = do
     contents <- readFile "$$FILE$$"
-    putStrLn (solve contents)
+    print (solve contents)
 
+getFileLines :: String -> [String] 
+getFileLines = lines
+
+concatLines :: [String] -> String
+concatLines = unlines
+
+concatValues :: [String] -> String
+concatValues = concat
 
 splitStrAt :: String -> Char -> String -> [String]
 splitStrAt "" _ buf = [buf | buf /= ""]
@@ -10,6 +18,14 @@ splitStrAt (c:s) del buf
     | c == del = buf : splitStrAt s del ""
     | otherwise = splitStrAt s del (buf ++ [c])
 
+strToint :: String -> Integer
+strToint s = read s :: Integer
+
+strToFloat :: String -> Float
+strToint s = read s :: Float
+
+strToFloat :: String -> Float
+strToint s = read s :: Double
 
 solve :: String -> String
 solve inp = 
