@@ -17,7 +17,7 @@ date = datetime.now(timezone.utc)
 print(date)
 YEAR = date.year
 MONTH = date.month
-DAY = date.day - 10
+DAY = date.day
 
 if DAY not in range(1, 26):
     print(RED + "Day not in 1..25" + RESET)
