@@ -2,6 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+const static char* DIGITS[] = {
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine"
+};
 
 char* getNextLine(FILE* f) {
     fpos_t filepos;
@@ -40,32 +51,10 @@ int getDigit(char* digit) {
     if (digit[0] <= '9' && digit[0] >= '0') {
         return digit[0] - '0';
     }
-    else if (strncmp(digit, "one", 3) == 0) {
-        return 1;
-    }
-    else if (strncmp(digit, "two", 3) == 0) {
-        return 2;
-    }
-    else if (strncmp(digit, "three", 5) == 0) {
-        return 3;
-    }
-    else if (strncmp(digit, "four", 4) == 0) {
-        return 4;
-    }
-    else if (strncmp(digit, "five", 4) == 0) {
-        return 5;
-    }
-    else if (strncmp(digit, "six", 3) == 0) {
-        return 6;
-    }
-    else if (strncmp(digit, "seven", 5) == 0) {
-        return 7;
-    }
-    else if (strncmp(digit, "eight", 5) == 0) {
-        return 8;
-    }
-    else if (strncmp(digit, "nine", 4) == 0) {
-        return 9;
+    for (int i = 0; i < 9; i++) {
+        if (strncmp(digit, DIGITS[i], strlen(DIGITS[i])) == 0) {
+            return i + 1;
+        }
     }
     return -1;
 }
