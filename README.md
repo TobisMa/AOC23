@@ -1,3 +1,7 @@
+# Actual teplate repository
+You can find it [here](https://github.com/TobisMa/AOC_Template)  
+
+
 # What is this?
 The file `daySetup.py` is more or less a terminal program for creating the day folder and files
 
