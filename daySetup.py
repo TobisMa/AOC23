@@ -53,6 +53,10 @@ if hours == 0 and mins <= 1 and time_left.seconds >= 0:
     print(YELLOW + "AOC starts today ..." + RESET)
     print()
 
+elif time_left.seconds <= 60 * 60:
+    print(RED + "AOC starts in a momment today" + RESET)
+    raise SystemExit(0)
+
 DAY_REPR = str(DAY).zfill(2)
 FOLDER_NAME = "day" + DAY_REPR
 
