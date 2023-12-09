@@ -11,7 +11,7 @@ main = do
     putStrLn (solve contents)
 
 solve :: String -> String
-solve inp = 
+solve inp = ""
 
 
 -- matrix
@@ -26,7 +26,7 @@ matSet :: Matrix a -> Int -> Int -> a -> Matrix a
 matSet m x y value = take y m ++ [rowSet (m !! y) x value] ++ drop (y+1) m
 
 matMap :: (a -> b) -> Matrix a -> Matrix b
-matMap f m = map (\x -> map f x) m
+matMap f = map (map f)
 
 matRowMap :: (Row a -> Row b) -> Matrix a -> Matrix b
 matRowMap = map
@@ -46,7 +46,7 @@ gridEmpty = matEmpty
 matFromString :: String -> String -> String -> Matrix String
 matFromString str lineDel rowDel = map (`rowFromString` rowDel) (splitStr str lineDel "")
 
-matFromList :: [a] -> Matrix a
+matFromList :: [[a]] -> Matrix a
 matFromList lst = map rowFromList lst
 
 rowFromString :: String -> String -> Row String
