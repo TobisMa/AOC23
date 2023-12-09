@@ -3,6 +3,7 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Map (Map, (!))
 import qualified Data.Map as Map
+import Data.Char (ord, chr)
 
 
 main :: IO()
@@ -11,7 +12,7 @@ main = do
     putStrLn (solve contents)
 
 solve :: String -> String
-solve inp = ""
+solve inp = 
 
 
 -- matrix
@@ -72,7 +73,7 @@ setInit = setFromList []
 mapInit :: Ord k => Map k v
 mapInit = mapFromList []
 
-mapFromList :: Ord k => [(k, v)] -> Map k v 
+mapFromList :: Ord k => [(k, v)] -> Map k v
 mapFromList lst = Map.fromList lst
 
 mapToList :: Ord k => Map k v -> [(k, v)]
@@ -89,7 +90,7 @@ removeDuplicatesRec [] = []
 removeDuplicatesRec (x:xs) = x : removeDuplicatesRec (filter (/= x) xs)
 
 
-getFileLines :: String -> [String] 
+getFileLines :: String -> [String]
 getFileLines = lines
 
 concatValuesByLine :: Show a => [a] -> String
@@ -101,7 +102,7 @@ concatStrsByLine = unlines
 concatValues :: Show a => [a] -> String
 concatValues = concatMap show
 
-concatStrs :: [String] -> String -> String 
+concatStrs :: [String] -> String -> String
 concatStrs (first:strs) sep = foldl (\acc x -> acc ++ sep ++ x) first strs
 
 valuesToStr :: Show a => [a] -> [String]
@@ -115,7 +116,7 @@ splitStrAt (c:s) del buf
     | otherwise = splitStrAt s del (buf ++ [c])
 
 splitStr :: String -> String -> String -> [String]
-splitStr "" _ buf = [buf | buf /= ""]
+splitStr "" _ buf = [buf | buf /= ""]   -- i am aware of the mistake that "bababa" splitted by a [b, b, b] returns; not what is expected: [b, b, b, ""] -> that mistake works wonderfully when parsing mistakes 
 splitStr s del buf
     | next == del = buf : splitStr following del ""
     | otherwise = splitStr (tail s) del (buf ++ [head s])
@@ -123,11 +124,48 @@ splitStr s del buf
         next = take (length del) s
         following = drop (length del) s
 
-strToint :: String -> Integer
-strToint s = read s :: Integer
+strToInteger :: String -> Integer
+strToInteger s = read s :: Integer
+
+strToInt :: String -> Int
+strToInt s = read s :: Int
 
 strToFloat :: String -> Float
 strToFloat s = read s :: Float
 
 strToDouble :: String -> Double
 strToDouble s = read s :: Double
+
+chrToDigit :: Char -> Int
+chrToDigit c = if o >= 48 && o <= 58 then o - 48 else error (c : " is not a valid digit")
+    where
+        o = ord c
+
+chrToLargeDigit :: Char -> Integer
+chrToLargeDigit '0' = 0
+chrToLargeDigit '1' = 1
+chrToLargeDigit '2' = 2
+chrToLargeDigit '3' = 3
+chrToLargeDigit '4' = 4
+chrToLargeDigit '5' = 5
+chrToLargeDigit '6' = 6
+chrToLargeDigit '7' = 7
+chrToLargeDigit '8' = 8
+chrToLargeDigit '9' = 9
+chrToLargeDigit s = error (s : " is not a valid digit")
+
+countOccurences :: Ord a => [a] -> Map a Int
+countOccurences = foldr (\x acc -> if Map.member x acc then Map.insert x ((acc ! x) + 1) acc else Map.insert x 1 acc) Map.empty
+
+sortBy :: Ord a => (a -> a -> Bool) -> [a] -> [a]
+sortBy _ [] = []
+sortBy f (x:lst) = left ++ [x] ++ right
+    where
+        left = sortBy f (filter (f x) lst)
+        right = sortBy f (filter (not . f x) lst)
+
+isDigit :: Char -> Bool
+isDigit c = ord c >= 48 && ord c <= 58
+
+isNumber :: String -> Bool
+isNumber = all isDigit

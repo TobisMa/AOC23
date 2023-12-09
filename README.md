@@ -1,5 +1,7 @@
 # Actual teplate repository
 You can find it [here](https://github.com/TobisMa/AOC_Template)  
+The haskell template is/was being developed during AoC 2023 and therefore, the template from this repository
+is "more complete"
 
 
 # What is this?
