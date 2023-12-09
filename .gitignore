@@ -3,3 +3,5 @@
 *.class
 *.exe
 *.o
+*.example
+*.hi
