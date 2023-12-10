@@ -4,16 +4,84 @@ import qualified Data.Set as Set
 import Data.Map (Map, (!))
 import qualified Data.Map as Map
 import Data.Char (ord, chr)
+import qualified Data.List as List
+import Data.Maybe (fromJust, isNothing)
+import Data.List (elemIndex)
+import Debug.Trace (trace)
 
 
 main :: IO()
 main = do
-    contents <- readFile "$$FILE$$"
+    contents <- readFile "day10\\data_day10.txt"
+    -- contents <- readFile "day10\\example.txt"
     putStrLn (solve contents)
 
 solve :: String -> String
-solve inp = 
+solve inp = show (res `div` 2 + 1)
+    where
+        grid = charGridFromString inp "\n"
+        start@(sx, sy) = findStart grid 0
+        res = loopLength grid start start []
 
+loopLength :: CharGrid -> (Int, Int) -> (Int, Int) -> [(Int, Int)] -> Int
+loopLength field pos@(px, py) start@(sx, sy) visited
+    | null options = 0
+    | otherwise = 1 + loopLength field (npx + px, npy + py) start (pos:visited)
+    where
+        ns = filter (\d -> bounds field d pos) neighbours
+        possible = zip (map (\n@(nx, ny) -> filter (\x -> direction x == n) (possibleNeighbours (matGet field px py) (matGet field (px + nx) (py + ny)))) ns) ns
+        possible2 = map snd (filter (\x -> fst x /="") possible)
+        options = filter (\d@(dx, dy) -> (dx + px, dy+py) `notElem` visited) possible2
+        (npx, npy) = trace (show pos) head options
+
+bounds :: CharGrid -> (Int, Int) -> (Int, Int) -> Bool
+bounds f (dx, dy) (px, py) = x >= 0 && y >= 0 && x < length f && y < length f
+    where
+        x = dx + px
+        y = dy + py
+
+debug :: Show a1 => a1 -> a2
+debug v = error ("Debug: " ++ show v)
+
+neighbours :: [(Int, Int)]
+neighbours = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+direction :: Char -> (Int, Int)
+direction 'n' = (0, -1)
+direction 's' = (0, 1)
+direction 'e' = (1, 0)
+direction 'w' = (-1, 0)
+direction d = error (d: " can not be mapped to a relative movement")
+
+oppositeDirection :: Char -> Char
+oppositeDirection 's' = 'n'
+oppositeDirection 'n' = 's'
+oppositeDirection 'e' = 'w'
+oppositeDirection 'w' = 'e'
+oppositeDirection d = error (d : " is no direction")
+
+
+possibleNeighbours :: Char -> Char -> [Char]
+possibleNeighbours start end = Set.toList (Set.intersection (Set.fromList goDir) (Set.fromList endDir))
+    where
+        goDir = pipeConnecting start
+        endDir = map oppositeDirection (pipeConnecting end)
+
+pipeConnecting :: Char -> [Char]
+pipeConnecting 'F' = ['e', 's']
+pipeConnecting '|' = ['n', 's']
+pipeConnecting 'L' = ['n', 'e']
+pipeConnecting '-' = ['w', 'e']
+pipeConnecting 'J' = ['w', 'n']
+pipeConnecting '7' = ['w', 's']
+pipeConnecting 'S' = ['n', 'e', 's', 'w']
+pipeConnecting _ = []
+
+findStart :: CharGrid -> Int -> (Int, Int)
+findStart [] _ = error "Upsi. No start"
+findStart (line:grid) y = if isNothing i then findStart grid (y+1) else (fromJust i, y)
+    where
+        i = elemIndex 'S' line
 
 -- matrix
 type CharGrid = Matrix Char
