@@ -9,7 +9,7 @@ solve :: String -> String
 solve inp = show (sum (adjacentNum (getFileLines inp) (0, 0) False ""))
 
 adjacentNum :: [String] -> (Int, Int) -> Bool -> String -> [Integer]
-adjacentNum flines (x, y) adjacent num
+adjacentNum flines pos@(x, y) adjacent num
     | length flines == y = [] 
     | length (flines !! y) == x = if adjacent && num /= "" 
         then strToInt num : adjacentNum flines (0, y+1) False ""
@@ -17,7 +17,7 @@ adjacentNum flines (x, y) adjacent num
     | not (isDigit ((flines !! y) !! x)) = if adjacent && num /= ""
          then strToInt num : adjacentNum flines (x + 1, y) False ""
          else adjacentNum flines (x + 1, y) False ""
-    | otherwise = adjacentNum flines (x + 1, y) (adjacent || isAdjacent flines (x, y)) (num ++ [(flines !! y) !! x])
+    | otherwise = adjacentNum flines (x + 1, y) (adjacent || isAdjacent flines pos) (num ++ [(flines !! y) !! x])
 
 isAdjacent :: [String] -> (Int, Int) -> Bool
 isAdjacent flines (x, y) = foldr 

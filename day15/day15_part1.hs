@@ -8,30 +8,21 @@ import Data.Char (ord, chr)
 
 main :: IO()
 main = do
-    contents <- readFile "day05\\data_day05.txt"
-    -- contents <- readFile "day05\\example.txt"
+    contents <- readFile "day15/data_day15.txt"
     putStrLn (solve contents)
 
 solve :: String -> String
-solve inp = show (res)
-    where
-        (seedString:_:other) = getFileLines inp
-        seeds = map strToInteger (splitStr (drop 7 seedString) " " "")
-        maps1 = matToList (matFromString (unlines other) "\n\n" "\n")
-        maps2 = map (\(_:line) -> map (\x -> map strToInteger (splitStr x " " "")) line) maps1
-        res = convert maps2 (head seeds)
-        -- res = map (convert maps2) seeds
+-- solve inp = show inp
+solve inp = show(sum(map hashing (splitStr (removeLast inp) "," "")))
 
-convert :: [[[Integer]]] -> Integer -> Integer
-convert maps num = foldl (\acc x -> conversion x acc) num maps
+hashing :: String -> Int
+hashing s = foldl singleHash 0 s
 
-conversion :: [[Integer]] -> Integer -> Integer
-conversion layer num = if null options then num else calc (head options) num
-    where
-        options = filter (\[d, s, r] -> num `elem` [s..s+r-1]) layer
+singleHash :: Int -> Char -> Int
+singleHash curVal c = ((ord c + curVal) * 17) `mod` 256
 
-calc :: [Integer] -> Integer -> Integer
-calc [d, s, _] num = d + num - s
+removeLast :: String -> String
+removeLast s = take (length s - 1) s
 
 -- matrix
 type CharGrid = Matrix Char
